@@ -1,13 +1,13 @@
 #pragma once
-//Commentare questa linea per disabilitare le Serial.print
+// Commentare questa linea per disabilitare le Serial.print
 #define DEBUG 1
 
-//Se 1 imposta comunicazione su bluetooth, se 2 su wifi
-//#define COMM 2
+// Se 1 imposta comunicazione su bluetooth, se 2 su wifi
+// #define COMM 2
 
 #define WIFI_MODE
-//#define BLE_MODE
-// INIZIO - Definizioni per la ricerca di reti
+// #define BLE_MODE
+//  INIZIO - Definizioni per la ricerca di reti
 
 // Definisce se il modulo deve cercare una rete specifica e basta
 #define WIFI_SPECIFIC_LOOKUP 0
@@ -37,11 +37,14 @@
 
 // ID dell'antenna
 #define ID 0
+// Definisco la porta su cui ascolto per comunicazioni da parte del server
+#define COMM_PORT 100
 // Nome del dispositivo bluetooth
 #define DEVICE_NAME "ESP_SERVER_" + ID
-//Definisci gli UUID
+// Definisci gli UUID
 #define SERVICE_UUID "4fafc201-1fb5-459e-8fcc-c5c9c331914b"
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
-//Numero massimo di dispositivi rintracciabili
+// Numero massimo di dispositivi rintracciabili
 #define MAX_ITEM_COUNT 20
+
 // FINE

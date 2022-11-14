@@ -40,7 +40,11 @@ Module::AntennaClient *antenna;
 
 void setup()
 {
+#ifdef DEBUG
   Serial.begin(115200);
+#else
+  Serial.end(true);
+#endif
   Module::setupModule();
   antenna = new Module::AntennaClient();
   antenna->start();

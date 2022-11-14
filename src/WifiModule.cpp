@@ -176,4 +176,16 @@ namespace Module
         this->client->endPacket();
     }
 
+    void AntennaClient::comunicateInfo()
+    {
+        this->client->beginPacket(HOST_IP, HOST_PORT);
+        unsigned char buffer[] = {ID, COMM_PORT};
+        unsigned char buffer_2[4];
+        // Invio i dati al server per farmi riconoscere
+        this->client->write(buffer, 2);
+        unsigned long now = htonl(millis() + 10); // Prevedo un ritardo di calcoli e comunicazione di 10ms
+        buffer[0] = now << 4;
+        this->client->write(now);
+    }
+
 }
