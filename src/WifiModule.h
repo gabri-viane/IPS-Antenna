@@ -10,6 +10,11 @@ namespace Module
     private:
         WiFiUDP *client;
         bool _init = false;
+
+        // Array di comunicazione
+        const unsigned char info_buffer[3] = {SEND_INFO, ID, COMM_PORT}; // Inizio trasmissione con il server
+        unsigned char tag_buffer[3] = {SEND_TAGS, ID, 0};                // Inizio comunicazione lista tag
+
         /*
         Indica se è stata inviata una nuova richiesta di connessione
         - true: ha inviato la richiesta per connettersi alla wifi
@@ -24,7 +29,7 @@ namespace Module
          * con il server per iniziare la comunicazione.
          *
          */
-        void comunicateInfo();
+        void sendInfoPacket();
         /**
          * @brief Si connette alla rete definita nel file "settings.h"
          *
@@ -65,12 +70,18 @@ namespace Module
          * @brief Invia un pacchetto dati al server specificando in automatico il proprio
          * ID di antenna definisto nel file "settings.h" e il numero di tag che sta inviando
          *
-         *
-         * @param tag_size Numero di reti dei tag rilevate
          * @param data Array di char contenente i dati da inviare
          * (la dimensione deve essere tag_size * 2)
+         * @param tag_size Numero di reti dei tag rilevate
          */
-        void sendTagsPacket(unsigned char tag_size, unsigned char *data);
+        void sendTagsPacket(unsigned char *data, unsigned char tag_size = 0);
+
+        /**
+         * @brief Controlla l'ultimo codice inviato del server e lo ritorna
+         *
+         * @return server_request_code Il codice ricevuto dal server
+         */
+        server_request_code requestStatus();
     };
 
     /**

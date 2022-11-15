@@ -54,9 +54,19 @@ void loop()
 {
   switch (antenna->requestStatus())
   {
-  case SEND_TAGS:
+  case REQUEST_TAGS:
     Module::scanNetwork(antenna);
     break;
+  case REQUEST_STOP:
+    antenna->stop();
+    break;
+  case REQUEST_SYNC:
+    antenna->start();
+    break;
+  case REQUEST_DEEP_SLEEP:
+    break;
+  case server_request_code::VOID:
+  case server_request_code::NO_REQ:
   default:
     break;
   }

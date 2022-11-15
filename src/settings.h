@@ -14,6 +14,10 @@
 #define WIFI_SCAN_PERIOD 2000
 // Imposta se la scansione è asincrona o no (Con scansone Asincrona i tempi migliorano apparentemente)
 #define ASYNC 0
+// Imposta il canale da scansionare
+#define CHANNEL 8U
+// Imposta i millisecondi massimi per canale
+#define MS_PER_CHANNEL 100U
 // FINE
 
 // INIZIO - Definizioni per la connessione alla rete madre
@@ -38,17 +42,34 @@
 // Codice di inizio comunicazione antenna (seguito da ID Antenna e Porta di lettura)
 #define SEND_INFO 200
 /**
- * Codice di richiesta di sincronizzazioneù
- *- l'antenna si mette in ascolto sulla porta comunicata in fase di inizio
- */
-#define REQUEST_SYNC 201
-/**
  * L'antenna comunica che è stata disconnessa dalla rete e non ha inviato i dati e li
  * invia in una volta sola
  */
-#define BUFFER_DISCONNECTED 202
+#define SEND_BUFFER_DISCONNECTED 202
 // Codice che precede la lista ti tags
 #define SEND_TAGS 203
+/**
+ *  @brief Codice di richiesta di sincronizzazione
+ *- l'antenna si mette in ascolto sulla porta comunicata in fase di inizio
+ */
+#define REQUEST_SYNC server_request_code::SYNC
+/**
+ * @brief Codice di richiesta di invio della scansione
+ *
+ */
+#define REQUEST_TAGS server_request_code::TAGS
+
+/**
+ * @brief Codice di richiesta del server per mettersi in deep sleep
+ *
+ */
+#define REQUEST_DEEP_SLEEP server_request_code::DEEP_SLEEP
+
+/**
+ * @brief Codice di richiesta del server per spegnere il client.
+ *
+ */
+#define REQUEST_STOP server_request_code::STOP
 // FINE
 
 // Non usate le parti BLUETOOTH
@@ -61,3 +82,13 @@
 #define CHARACTERISTIC_UUID "beb5483e-36e1-4688-b7f5-ea07361b26a8"
 // Numero massimo di dispositivi rintracciabili
 #define MAX_ITEM_COUNT 20
+
+enum server_request_code
+{
+    VOID = -1,
+    NO_REQ = 0,
+    SYNC = 220,
+    STOP = 255,
+    TAGS = 221,
+    DEEP_SLEEP = 254
+};

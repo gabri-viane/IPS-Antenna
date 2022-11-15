@@ -74,10 +74,10 @@ namespace Module
             // Avvia una nuova scansione
 #if WIFI_SPECIFIC_LOOKUP
             // Scansione di WiFi con nome
-            WiFi.scanNetworks(true, true, false, 300U, 0U, SEARCH_WIFI_NAME);
+            WiFi.scanNetworks(true, true, false, MS_PER_CHANNEL, CHANNEL, SEARCH_WIFI_NAME);
 #else
             // Cerco tutte le WiFi
-            WiFi.scanNetworks(true, true, false, 300U);
+            WiFi.scanNetworks(true, true, false, MS_PER_CHANNEL, CHANNEL);
 #endif
         }
     }
@@ -91,9 +91,9 @@ namespace Module
         Serial.print("Inizio... ");
 #endif
 #if WIFI_SPECIFIC_LOOKUP
-        scan_result = WiFi.scanNetworks(false, true, false, 300U, 0U, SEARCH_WIFI_NAME);
+        scan_result = WiFi.scanNetworks(false, true, false, MS_PER_CHANNEL, CHANNEL, SEARCH_WIFI_NAME);
 #else
-        scan_result = WiFi.scanNetworks(false, false, false, 100U, 8U);
+        scan_result = WiFi.scanNetworks(false, false, false, MS_PER_CHANNEL, CHANNEL);
 #endif
 #ifdef DEBUG
         Serial.print(" - Fine scansione\n");
@@ -104,21 +104,26 @@ namespace Module
 #ifdef DEBUG
             Serial.printf("Found %d networks in %d ms\n", scan_result, _t);
 #endif
-            unsigned char data[scan_result * 2];
+            register unsigned char data[scan_result * 7]; // 7= 6 bytes MAC_Address + 1 RSSI
+            register unsigned char *MAC;
+            register unsigned char rssi;
             for (int i = 0, z = 0; i < scan_result; i++)
             {
-                String ssid = WiFi.SSID(i);
-                unsigned char rssi = -WiFi.RSSI(i);
+                MAC = WiFi.BSSID(i);
+                rssi = -WiFi.RSSI(i);
+                data[z++] = MAC[0];
+                data[z++] = MAC[1];
+                data[z++] = MAC[2];
+                data[z++] = MAC[3];
+                data[z++] = MAC[4];
+                data[z++] = MAC[5];
+                data[z++] = rssi;
 #ifdef DEBUG
-                Serial.printf("%s : -%d\n", ssid, rssi);
+                Serial.printf("%02x:%02x:%02x:%02x:%02x:%02x : -%d\n", MAC[0], MAC[1], MAC[2], MAC[3], MAC[4], MAC[5], rssi);
 #endif
-                data[z] = ssid[0];
-                z++;
-                data[z] = rssi;
-                z++;
             }
             // Invio il pacchetto di dati al server
-            antenna->sendTagsPacket(scan_result, data);
+            antenna->sendTagsPacket(data, scan_result);
         }
         WiFi.scanDelete();
     }
@@ -135,10 +140,12 @@ namespace Module
         {
             delay(10);
         }
-        this->comunicateInfo();
+        this->client->begin(COMM_PORT);
+        this->sendInfoPacket();
     }
 
-    void AntennaClient::stop(){
+    void AntennaClient::stop()
+    {
         this->client->stop();
     }
 
@@ -148,7 +155,6 @@ namespace Module
         {
             WiFi.begin(NETWORK_SSID, NETWORK_PSW, 8);
             this->conn_req = true;
-            this->client->begin(HOST_PORT);
         }
         switch (WiFi.status())
         {
@@ -172,29 +178,30 @@ namespace Module
         }
     }
 
-    void AntennaClient::sendTagsPacket(unsigned char tag_size, unsigned char data[])
+    server_request_code AntennaClient::requestStatus()
+    {
+        if (this->client->parsePacket() > 0)
+        {
+            int read = this->client->read();
+            return server_request_code(read);
+        }
+        return server_request_code::VOID;
+    }
+
+    void AntennaClient::sendTagsPacket(unsigned char *data, unsigned char tag_size)
     {
         this->client->beginPacket(HOST_IP, HOST_PORT);
-        unsigned char buffer[] = {SEND_TAGS, ID, tag_size};
-        this->client->write(buffer, 3);
+        this->tag_buffer[2] = tag_size;
+        this->client->write(this->tag_buffer, 3);
         this->client->write(data, tag_size * 2);
         this->client->endPacket();
     }
 
-    void AntennaClient::comunicateInfo()
+    void AntennaClient::sendInfoPacket()
     {
         this->client->beginPacket(HOST_IP, HOST_PORT);
-        unsigned char buffer[] = {SEND_INFO, ID, COMM_PORT};
-        //unsigned char buffer_2[4];
-        // Invio i dati al server per farmi riconoscere
-        this->client->write(buffer, 3);
-        /*
-        unsigned long now = htonl(millis() + 10); // Prevedo un ritardo di calcoli e comunicazione di 10ms
-        buffer[0] = now << 4;
-        this->client->write(now);
-        */
+        this->client->write(this->info_buffer, 3);
         this->client->endPacket();
-        this->client->parsePacket();
     }
 
 }
