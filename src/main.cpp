@@ -52,7 +52,14 @@ void setup()
 
 void loop()
 {
-  Module::scanNetwork(antenna);
+  switch (antenna->requestStatus())
+  {
+  case SEND_TAGS:
+    Module::scanNetwork(antenna);
+    break;
+  default:
+    break;
+  }
 }
 
 #endif

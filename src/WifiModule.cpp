@@ -135,6 +135,11 @@ namespace Module
         {
             delay(10);
         }
+        this->comunicateInfo();
+    }
+
+    void AntennaClient::stop(){
+        this->client->stop();
     }
 
     bool AntennaClient::connectToNetwork()
@@ -170,8 +175,8 @@ namespace Module
     void AntennaClient::sendTagsPacket(unsigned char tag_size, unsigned char data[])
     {
         this->client->beginPacket(HOST_IP, HOST_PORT);
-        unsigned char buffer[] = {ID, tag_size};
-        this->client->write(buffer, 2);
+        unsigned char buffer[] = {SEND_TAGS, ID, tag_size};
+        this->client->write(buffer, 3);
         this->client->write(data, tag_size * 2);
         this->client->endPacket();
     }
@@ -179,13 +184,17 @@ namespace Module
     void AntennaClient::comunicateInfo()
     {
         this->client->beginPacket(HOST_IP, HOST_PORT);
-        unsigned char buffer[] = {ID, COMM_PORT};
-        unsigned char buffer_2[4];
+        unsigned char buffer[] = {SEND_INFO, ID, COMM_PORT};
+        //unsigned char buffer_2[4];
         // Invio i dati al server per farmi riconoscere
-        this->client->write(buffer, 2);
+        this->client->write(buffer, 3);
+        /*
         unsigned long now = htonl(millis() + 10); // Prevedo un ritardo di calcoli e comunicazione di 10ms
         buffer[0] = now << 4;
         this->client->write(now);
+        */
+        this->client->endPacket();
+        this->client->parsePacket();
     }
 
 }
