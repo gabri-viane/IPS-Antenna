@@ -60,11 +60,11 @@ Risponde al comando *REQUEST_TAGS* inviato dal server: dopo aver eseguito la sca
 
 1. Header:
 
-    #Byte|Valore|Significato
-    ---|---|---
-    0|203|SEND_TAGS
-    1|Numero|ID Antenna
-    2|Numero|Numero tags elencati
+    | #Byte | Valore | Significato          |
+    | ----- | ------ | -------------------- |
+    | 0     | 203    | SEND_TAGS            |
+    | 1     | Numero | ID Antenna           |
+    | 2     | Numero | Numero tags elencati |
 
 2. Corpo:
  
@@ -72,31 +72,30 @@ Risponde al comando *REQUEST_TAGS* inviato dal server: dopo aver eseguito la sca
     
     Ogni elemento è costruito in questo modo: i primi 6 bytes sono il MAC-Address del Tag e il settimo byte è il valore assoluto del RSSI:
 
-     #Byte|Valore|Significato
-    ---|---|---
-    0|Numero|Primo valore MAC
-    1|Numero|Secondo valore MAC
-    2|Numero|Terzo valore MAC
-    3|Numero|Quarto valore MAC
-    4|Numero|Quinto valore MAC
-    5|Numero|Sesto valore MAC
-    6|Numero (0 .. 100)|Valore RSSI
+     | #Byte | Valore            | Significato        |
+     | ----- | ----------------- | ------------------ |
+     | 0     | Numero            | Primo valore MAC   |
+     | 1     | Numero            | Secondo valore MAC |
+     | 2     | Numero            | Terzo valore MAC   |
+     | 3     | Numero            | Quarto valore MAC  |
+     | 4     | Numero            | Quinto valore MAC  |
+     | 5     | Numero            | Sesto valore MAC   |
+     | 6     | Numero (0 .. 100) | Valore RSSI        |
 
 Un esempio di risposta potrebbe essere
 
     (char)203 (char)5 (char)1 (char) 255 (char) 255 (char) 255 (char) 255 (char) 255 (char) 255 (char) 72
 
 Che rappresenta:
-  1. Codice *SEND_TAGS*
-  2. ID Antenna
-  3. Numero tags rilevati
-  4. FF
-  5. FF
-  6. FF
-  7. FF
-  8. FF
-  9. FF
-  10. FF
-  11. Potenza RSSI: -72 db
+  1. Codice *SEND_TAGS* : 203
+  2. ID Antenna : 5
+  3. Numero tags rilevati : 1
+  4. MAC-1 : FF
+  5. MAC-2 : FF
+  6. MAC-3 : FF
+  7. MAC-4 : FF
+  8. MAC-5 : FF
+  9. MAC-6 : FF
+  10. Potenza RSSI: -72 db
 
-Dal punto 4 al 10 è il codice MAC Address *FF:FF:FF:FF:FF:FF*
+Dal punto 4 al 9 è il codice MAC Address *FF:FF:FF:FF:FF:FF*
