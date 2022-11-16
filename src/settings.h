@@ -22,11 +22,11 @@
 
 // INIZIO - Definizioni per la connessione alla rete madre
 // Nome della rete a cui connettersi
-#define NETWORK_SSID "Quuppa"
+#define NETWORK_SSID "IPS_Network"
 // Password della rete a cui connettersi
-#define NETWORK_PSW "cuvurssscd"
+#define NETWORK_PSW "ips_sys@32"
 // Host a cui inizializzare il client
-#define HOST_IP "192.168.0.3"
+#define HOST_IP "192.168.0.2"
 // porta dell'host a cui comunicare
 #define HOST_PORT 2522
 // Definisco la porta su cui ascolto per comunicazioni da parte del server
