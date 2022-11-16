@@ -1,3 +1,4 @@
+[⬅️ Indice](index.md)
 # Comunicazione Antenna > Server
 
 In questo file vengono spiegate le risposte dell'antenna al server. Le risposte possono essere causate da una richiesta del server o da un comportamento autonomo quale: 

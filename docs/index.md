@@ -6,4 +6,4 @@ L'antenna prevede diversi tipi di comunicazione attraverso il protocollo **UDP/I
 
 Comunicazione 
 * [server-antenna](stoa.md)
-* [antenna->server](atos.md)
+* [antenna-server](atos.md)
