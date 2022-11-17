@@ -35,8 +35,13 @@ void loop()
 #ifdef WIFI_MODE
 #define WIFI
 #include "WifiModule.h"
+#include "PowerMode.h"
 
 Module::AntennaClient *antenna;
+Module::EnergyHandler *handler;
+void antenna_cycle();
+void sleep_cycle();
+void (*check_fun)();
 
 void setup()
 {
@@ -48,9 +53,15 @@ void setup()
   Module::setupModule();
   antenna = new Module::AntennaClient();
   antenna->start();
+  check_fun = &antenna_cycle;
 }
 
 void loop()
+{
+  check_fun();
+}
+
+void antenna_cycle()
 {
   switch (antenna->requestStatus())
   {
@@ -64,10 +75,25 @@ void loop()
     antenna->start();
     break;
   case REQUEST_DEEP_SLEEP:
+    handler = new Module::EnergyHandler(antenna);
+    check_fun = &sleep_cycle;
     break;
   case server_request_code::VOID:
   case server_request_code::NO_REQ:
   default:
+    break;
+  }
+}
+
+void sleep_cycle()
+{
+
+  switch (handler->requestStatus())
+  {
+  case antenna_status_code::NO_STATUS:
+    handler->setCallback([]()
+                         { check_fun = &antenna_cycle; });
+    handler->start();
     break;
   }
 }

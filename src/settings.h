@@ -92,3 +92,11 @@ enum server_request_code
     TAGS = 221,
     DEEP_SLEEP = 254
 };
+
+enum antenna_status_code
+{
+    NO_STATUS = 0,
+    ALERT_SENT = 1,
+    ALERT_RECEIVED = 2,
+    IN_DEEP_SLEEP = 3
+};

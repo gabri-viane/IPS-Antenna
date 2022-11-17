@@ -204,4 +204,14 @@ namespace Module
         this->client->endPacket();
     }
 
+    int AntennaClient::getNext()
+    {
+        int total_chars = this->client->available();
+        if (total_chars > 0)
+        {
+            return this->client->read();
+        }
+        return 0;
+    }
+
 }

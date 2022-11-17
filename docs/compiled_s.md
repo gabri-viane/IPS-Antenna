@@ -10,7 +10,7 @@ SEARCH_WIFI_NAME|string|"PROVA"|Nome della WiFi specifica da cercare
 WIFI_SCAN_PERIOD|int|2000|Intervallo in secondi di ogni scansione se l'antenna perde la connessione al server
 ASYNC|bool|0|Imposta la scansione come asincrona
 CHANNEL|unsigned int|8U|Canale WiFi da scansionare (utile per ridurre il carico di lavoro)
-MS_PER_CHANNEL|unsigned int|100U|Millesecondi di scansione per canale
+MS_PER_CHANNEL|unsigned int|100U|Millisecondi di scansione per canale
 NETWORK_SSID|string|"IPS_Network"|Nome rete del sistema
 NETWORK_PSW|string|"ips_sys@32"|Password della rete del sistema
 HOST_IP|string|"192.168.0.2"|Indirizzo IP locale della rete del sistema che rappresenta il server

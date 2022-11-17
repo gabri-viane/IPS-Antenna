@@ -1,3 +1,4 @@
+#pragma once
 #include "settings.h"
 #include "WiFi.h"
 #include "WiFiUdp.h"
@@ -82,6 +83,13 @@ namespace Module
          * @return server_request_code Il codice ricevuto dal server
          */
         server_request_code requestStatus();
+
+        /**
+         * @brief Ritorna il prossimo carattere, se presente, inviato dal server
+         *
+         * @return int Il carattere letto o -1 se non presente
+         */
+        int getNext();
     };
 
     /**
